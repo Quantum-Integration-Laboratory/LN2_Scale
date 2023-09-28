@@ -1,2 +1,5 @@
 pyusb
 libusb
+slackclient
+yaml
+glob

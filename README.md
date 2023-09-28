@@ -2,32 +2,53 @@
 An interface to talk to the scale that measures our LN2 dewer and hopefully sends us a message when its getting low. Forked from Null-none/dymo-scale. 
 
 # Installation
-In order to make files easier to access they can be installed as a package via pip and such.
-
-Our naming convention for a driver is `qil_<DriverName>` matching cases, where `<>` indicates the parts you can change. 
- 
-With the driver repo written it should be cloned onto a lab pc using github desktop, into the directory `./Docs/GITHUB/Drivers/`, such that there will now be a folder named `./Docs/GITHUB/Drivers/<repo name>`. with structure
+We don't require this package to be installed to pip as everything should just run from this local folder. Installation of requirements should be 
 ```
-<repo name>
-  |->qil_<DriverName>
-  ...
-  |->requirements.txt
-  \->setup.py
+pip install -r ./requirements.txt
 ```
 
-With everything cloned correctly, open a terminal or anaconda prompt depending on what is used `cd ./<path>/<repo name>` and then run 
-```
-pip install --editable .
-```
-The `--editable` flag means the installed script just points back to the folder so updates will be recognised when we pull any updates into this folder
-### Note for windows
+## Setting up path and environment variable (Windows)
 We need to point the USB drivers to the correct place make note of where libusb is installed, for me it was something like this:
 ```
 ../AppData/Local/Programs/Python/Python39/Lib/site-packages/libusb/_platform/_windows
 ```
 Make sure to add both the `x64` and `x86` folders to path.
 
+While we are there also need to set some environment variables such that we don't need to share secrets. The main one is we need to add a variable `SLACK_BOT_TOKEN` on windows this is in the same place as Path variables.
 
+If the config flag `ALERT_CRASH` is set a `MAINTAINER_SLACK_CHANNEL` slack channel must also be set as an environment variable, this will be something along the lines of `U########`. (Ben Note: I will set it to me but this will likely need to be changed at somepoint.)
+
+## Using the Scheduler (Windows).
+The goal is to let the operating system handle the repition of the logging, this should be somewhat less resource intensive.
+
+Open the windows task scheduler, set up a new task
+
+**Trigger:** Begin Task on *startup*, Repeat task every *hour* for a duration of *indefinitely*
+**Action:** Start a program *Log.py*
+
+# Config.yaml
+This is where we can change most of our settings this is read whenever the program is launched
+```
+scales:
+  PID: (int) Product ID of the scale
+  VID: (int) Vendor ID of the scale
+slack:
+  LOW_CHANNEL: (str) The Slack Channel to send to when we're low
+  VERY_LOW_CHANNEL: (str) The Slack channel to send to when we are very low and refil is urgent
+  LOW_MESSAGE: (str) The message to send when we are low, only requirement is that a percentage is inserted somewhere
+  VERY_LOW_MESSAGE: (str) The message to send when we are very low, only requirement is that a percentage is inserted somewhere
+  PLOTTING: (bool) If we send a plot with the low message
+logging:
+  PATH: (str) The path to save our logs to
+  LOGNAME: (str) The name to add to the file timestamp
+  REMOVE_OLD: (bool) remove old images, redundant as we just override
+  ALERT_CRASH: (bool) Should a slack message be sent on a crash, see environement variables section
+weight:
+  MAX_WEIGHT: (float) The weight when full
+  DRY_WEIGHT: (float) The weight when empty
+  LOW: (float) The percentage when we should send the low alert
+  VERY_LOW: (float) The percentage when we should send the very low alert
+```
 # Bens Notes on the scale.
 **Vendor ID:** 0x0922
 
