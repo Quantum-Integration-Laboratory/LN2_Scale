@@ -39,8 +39,8 @@ class scaleLog:
 
             #Check if we haven't already sent a message
             with open('./flags.yml','r') as file:
-                flags=yaml.safe_load(file)
-                SEND_FLAG=flags['SEND_FLAG']
+                self.flags=yaml.safe_load(file)
+                SEND_FLAG=self.flags['SEND_FLAG']
             
             #If we are very low get the correct messages and send without an image, this will spam every update
             if self.percent<=self.VERY_LOW:
@@ -80,10 +80,9 @@ class scaleLog:
 
     def flipSendFlag(self):
         #read and flip the send flag and save 
-        with open('./flags.yml','w+') as file:
-            flags=yaml.safe_load(file)
-            flags['SEND_FLAG']^=True
-            yaml.dump(flags,file)
+        with open('./flags.yml','w') as file:
+            self.flags['SEND_FLAG']^=True
+            yaml.dump(self.flags,file)
             
     def sendMessage(self,plot,message,channel):
         #instantiate bluey
