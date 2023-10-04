@@ -1,6 +1,5 @@
 pyusb
 libusb
 slackclient
-pyYAML
-pandas
-matplotlib
+yaml
+glob

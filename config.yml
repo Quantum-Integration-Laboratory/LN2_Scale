@@ -15,5 +15,5 @@ logging:
 weight:
   MAX_WEIGHT: 28.3
   DRY_WEIGHT: 11.0
-  LOW: 0.1
-  VERY_LOW: 0.05
+  LOW: 0.25
+  VERY_LOW: 0.1

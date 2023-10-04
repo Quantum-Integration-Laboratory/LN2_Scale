@@ -133,9 +133,9 @@ class scaleLog:
         TS=[datetime.fromisoformat(x) for x in data["TS"]]
         
         #Plot said file
-        plt.plot(TS,data["weight"])
+        plt.plot(TS,data["weight"],'*-')
         plt.xlabel("Timestamp")
-        plt.ylabel("Weight")
+        plt.ylabel("Weight (kg)")
         plt.xticks(rotation=45, ha='right')
         
         #Save plot
