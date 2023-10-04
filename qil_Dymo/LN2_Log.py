@@ -1,7 +1,7 @@
 from . import scale
 
 import os
-from datetime import datetime
+from datetime import datetime,time
 import sys
 from slack import WebClient
 import yaml
@@ -43,7 +43,8 @@ class scaleLog:
                 SEND_FLAG=self.flags['SEND_FLAG']
             
             #If we are very low get the correct messages and send without an image, this will spam every update
-            if self.percent<=self.VERY_LOW:
+            #unless we are in after hours
+            if self.percent<=self.VERY_LOW and not self.isAfterHours():
                 message=self.config['slack']['VERY_LOW_MESSAGE']%round(self.percent*100,0)
                 channel=self.config['slack']['VERY_LOW_CHANNEL']
                 self.sendMessage(False,message,channel)
@@ -76,7 +77,7 @@ class scaleLog:
 
         #Slack
         self.PLOTTING=config['slack']['PLOTTING']
-       
+ 
 
     def flipSendFlag(self):
         #read and flip the send flag and save 
@@ -164,6 +165,15 @@ class scaleLog:
             self.newLogFile()
         elif not glob.glob(PATH+"/*.csv"):
             self.newLogFile()
+    def isAfterHours(self):
+        startTime=self.config['slack']['START_AFTER_HOURS']
+        endTime=self.config['slack']['STOP_AFTER_HOURS']
+        nowTime=datetime.now().hour
+
+        if startTime < endTime:
+            return startTime <= nowTime <= endTime
+        else: #Over midnight
+            return nowTime >= startTime or nowTime <= endTime
             
 class simpleSlackBotBluey:
     def __init__(self,channel):

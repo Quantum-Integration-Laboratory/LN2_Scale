@@ -7,6 +7,8 @@ slack:
   LOW_MESSAGE: ':bangbang: Liquid Nitrogen Trap at %s%% please refill soon. :bangbang:'
   VERY_LOW_MESSAGE: ':bangbang::bangbang: Liquid Nitrogen Trap at %s%% please refill Immediatly.:bangbang::bangbang:'
   PLOTTING: true
+  START_AFTER_HOURS: 20 
+  STOP_AFTER_HOURS: 8
 logging:
   PATH: './Logs/'
   LOGNAME: '_Dewer_log'
