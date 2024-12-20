@@ -55,7 +55,7 @@ weight:
 **Product ID:** 0x0922
 
 ## Rough Return Registers:
-Taken from [this](https://gist.github.com/tresf/898ab2d4d259aef2d4f7) Project they seem to line up pretty well.
+Taken from [this](https://gist.github.com/tresf/898ab2d4d259aef2d4f7) Project, they seem to line up pretty well.
 
 Register| 0 | 1      | 2     | 3         | 4        | 5        |
 |--------|---|--------|-------|-----------|----------|----------|

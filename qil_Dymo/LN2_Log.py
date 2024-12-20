@@ -41,10 +41,11 @@ class scaleLog:
             with open('./flags.yml','r') as file:
                 self.flags=yaml.safe_load(file)
                 SEND_FLAG=self.flags['SEND_FLAG']
+                ITERATOR=self.flags['ITERATOR']
             
             #If we are very low get the correct messages and send without an image, this will spam every update
             #unless we are in after hours
-            if self.percent<=self.VERY_LOW and not self.isAfterHours():
+            if self.percent<=self.VERY_LOW and not self.isAfterHours() and self.isNHoursPassed(ITERATOR):
                 message=self.config['slack']['VERY_LOW_MESSAGE']%round(self.percent*100,0)
                 channel=self.config['slack']['VERY_LOW_CHANNEL']
                 self.sendMessage(False,message,channel)
@@ -77,12 +78,13 @@ class scaleLog:
 
         #Slack
         self.PLOTTING=config['slack']['PLOTTING']
- 
+        self.REPEAT_HOURS=config['slack']['PLOTTING']
 
     def flipSendFlag(self):
         #read and flip the send flag and save 
         with open('./flags.yml','w') as file:
             self.flags['SEND_FLAG']^=True
+            self.flags['ITERATOR']=0#reset the iterator as its only used in very low situations where this isn't called
             yaml.dump(self.flags,file)
             
     def sendMessage(self,plot,message,channel):
@@ -174,11 +176,15 @@ class scaleLog:
             return startTime <= nowTime <= endTime
         else: #Over midnight
             return nowTime >= startTime or nowTime <= endTime
+    def isNHoursPassed(self,ITERATOR):
+        ret=ITERATOR%self.REPEAT_HOURS==0
+        return ret
             
 class simpleSlackBotBluey:
     def __init__(self,channel):
         #Slackbot capable of sending messages
-        self.client = WebClient(str(os.environ.get('SLACK_BOT_TOKEN')))
+        self.token=str(os.environ.get('SLACK_BOT_TOKEN'))
+        self.client = WebClient(self.token)
         self.channel=channel
         
     def sendMessage(self,message,channel=None):
@@ -186,10 +192,10 @@ class simpleSlackBotBluey:
            channel=self.channel
        
        return self.client.chat_postMessage(channel=channel,text=message)
-    def sendFileMessage(self,message,imfile,channel=None):
+    def sendFileMessageOld(self,message,imfile,channel=None):
         if channel==None:
            channel=self.channel
-        return self.client.files_upload(channels=channel,title="test",file=imfile,initial_comment=message)
+        return self.client.files_upload_v2(channels=channel,title="test",file=imfile,initial_comment=message)
 
 
 def findLatestFile(path=PATH):

@@ -9,6 +9,7 @@ slack:
   PLOTTING: true
   START_AFTER_HOURS: 20 
   STOP_AFTER_HOURS: 8
+  REPEAT_HOURS: 4
 logging:
   PATH: './Logs/'
   LOGNAME: '_Dewer_log'
