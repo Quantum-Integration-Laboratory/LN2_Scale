@@ -3,7 +3,7 @@ from . import scale
 import os
 from datetime import datetime,time
 import sys
-from slack import WebClient
+from slack_sdk import WebClient
 import yaml
 import glob
 
@@ -197,7 +197,7 @@ class simpleSlackBotBluey:
     def sendFileMessage(self,message:str,imfile:str,channel=None):
         if channel==None:
            channel=self.channel
-        return self.client.files_upload_v2(channels=channel,title="test",file=imfile,initial_comment=message)
+        return self.client.files_upload_v2(channel=channel,title="test",file=imfile,initial_comment=message)
     def getChannelId(self,channel:str):
         """
         Returns the id of the channel based on its name is probably longer than it needs to be but blame the API

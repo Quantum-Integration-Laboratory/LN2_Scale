@@ -2,8 +2,8 @@ scales:
   PID: 0x8009
   VID: 0x0922
 slack:
-  LOW_CHANNEL: '# hardware-bluey'
-  VERY_LOW_CHANNEL: '# general'
+  LOW_CHANNEL: 'hardware-bluey'
+  VERY_LOW_CHANNEL: 'general'
   LOW_MESSAGE: ':bangbang: Liquid Nitrogen Trap at %s%% please refill soon. :bangbang:'
   VERY_LOW_MESSAGE: ':bangbang::bangbang: Liquid Nitrogen Trap at %s%% please refill Immediatly.:bangbang::bangbang:'
   PLOTTING: true
