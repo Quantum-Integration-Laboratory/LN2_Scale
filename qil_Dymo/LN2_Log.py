@@ -181,21 +181,37 @@ class scaleLog:
         return ret
             
 class simpleSlackBotBluey:
-    def __init__(self,channel):
+    def __init__(self,channel:str,id:bool=False):
         #Slackbot capable of sending messages
         self.token=str(os.environ.get('SLACK_BOT_TOKEN'))
         self.client = WebClient(self.token)
-        self.channel=channel
-        
-    def sendMessage(self,message,channel=None):
+        if id:
+            self.channel=channel
+        else:
+            self.channel=self.getChannelId(channel)    
+    def sendMessage(self,message:str,channel=None):
        if channel==None:
            channel=self.channel
        
        return self.client.chat_postMessage(channel=channel,text=message)
-    def sendFileMessageOld(self,message,imfile,channel=None):
+    def sendFileMessage(self,message:str,imfile:str,channel=None):
         if channel==None:
            channel=self.channel
         return self.client.files_upload_v2(channels=channel,title="test",file=imfile,initial_comment=message)
+    def getChannelId(self,channel:str):
+        """
+        Returns the id of the channel based on its name is probably longer than it needs to be but blame the API
+        ______________
+        
+        Paramaters:
+            channel (str): the channel name to search for 
+        Return:
+            id (str): the channels id
+        """
+        channelList=self.client.conversations_list()['channels']
+        channel=next(item for item in channelList if item["name"] == channel)
+        id=channel["id"]
+        return id
 
 
 def findLatestFile(path=PATH):
